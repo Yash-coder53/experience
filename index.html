@@ -3,107 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Experience Letter Generator</title>
+  <title>Professional Experience Letter Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="app-header">
-    <h1>📝 Experience Letter Generator</h1>
-    <p>Fill company and employee details to generate a professional letter instantly.</p>
+    <h1>🏢 Corporate Experience Letter Generator</h1>
+    <p>Generate a professional, ready-to-print experience certificate.</p>
   </header>
 
   <main class="container">
     <!-- ================= FORM ================= -->
     <section class="form-panel">
-      <h2>Letter Details</h2>
+      <h2>Company & Employee Details</h2>
 
       <!-- Company Info -->
       <fieldset>
-        <legend>Company Details</legend>
-        <input type="text" id="company-name" placeholder="Company Name (e.g. ABC Pvt. Ltd.)" oninput="updatePreview()" />
-        <textarea id="company-address" rows="2" placeholder="Company Address" oninput="updatePreview()"></textarea>
+        <legend>Company Details (Letterhead)</legend>
+        <input type="text" id="company-name" placeholder="Company Name (e.g. ABC Technologies Pvt. Ltd.)" oninput="updatePreview()" />
+        <input type="text" id="company-address" placeholder="Full Company Address" oninput="updatePreview()" />
+        <input type="text" id="company-contact" placeholder="Website / Email / Phone (Optional)" oninput="updatePreview()" />
       </fieldset>
 
       <!-- Date & Ref -->
       <fieldset>
         <legend>Date & Reference</legend>
         <input type="date" id="letter-date" oninput="updatePreview()" />
-        <input type="text" id="ref-number" placeholder="Ref No. (Optional)" oninput="updatePreview()" />
+        <input type="text" id="ref-number" placeholder="Ref No. (e.g. HR/EXP/2026/001)" oninput="updatePreview()" />
       </fieldset>
 
       <!-- Employee Info -->
       <fieldset>
-        <legend>Employee Details</legend>
-        <input type="text" id="emp-name" placeholder="Employee Name" oninput="updatePreview()" />
-        <input type="text" id="emp-designation" placeholder="Designation (e.g. Accountant)" oninput="updatePreview()" />
+        <legend>Employee Information</legend>
+        <input type="text" id="emp-name" placeholder="Employee Full Name" oninput="updatePreview()" />
+        <input type="text" id="emp-designation" placeholder="Designation (e.g. Senior Accountant)" oninput="updatePreview()" />
         <input type="text" id="emp-id" placeholder="Employee ID (Optional)" oninput="updatePreview()" />
       </fieldset>
 
       <!-- Job Info -->
       <fieldset>
-        <legend>Employment Details</legend>
-        <input type="date" id="join-date" oninput="updatePreview()" title="Joining Date" />
-        <label class="small-label">Joining Date (above)</label>
+        <legend>Employment Tenure</legend>
+        <label class="small-label">Joining Date:</label>
+        <input type="date" id="join-date" oninput="updatePreview()" />
         
-        <input type="date" id="end-date" oninput="updatePreview()" title="Relieving Date" />
-        <label class="small-label">Relieving Date (above)</label>
+        <label class="small-label">Relieving Date:</label>
+        <input type="date" id="end-date" oninput="updatePreview()" />
       </fieldset>
 
       <!-- Letter Body -->
       <fieldset>
         <legend>Letter Content</legend>
-        <textarea id="body-text" rows="5" placeholder="Write the main body of the letter. (e.g. This is to certify that...)" oninput="updatePreview()"></textarea>
-        <input type="text" id="signatory-name" placeholder="Signatory Name (HR/Manager)" oninput="updatePreview()" />
-        <input type="text" id="signatory-title" placeholder="Signatory Designation" oninput="updatePreview()" />
+        <textarea id="body-text" rows="4" placeholder="Leave blank for standard professional text, or write custom paragraphs here..."></textarea>
       </fieldset>
 
-      <button type="button" class="download-btn" onclick="downloadPDF()">⬇ Download as PDF</button>
+      <!-- Signatory -->
+      <fieldset>
+        <legend>Authorized Signatory</legend>
+        <input type="text" id="signatory-name" placeholder="HR / Manager Name" oninput="updatePreview()" />
+        <input type="text" id="signatory-title" placeholder="Designation (e.g. HR Manager)" oninput="updatePreview()" />
+      </fieldset>
+
+      <button type="button" class="download-btn" onclick="downloadPDF()">⬇ Download Professional PDF</button>
     </section>
 
     <!-- ================= PREVIEW ================= -->
     <section class="preview-panel">
-      <h2>Live Preview</h2>
+      <h2>Document Preview</h2>
       
       <!-- A4 Sized Letter Paper -->
       <div class="a4-page" id="letter-preview">
         
-        <!-- Company Header -->
+        <!-- Professional Letterhead -->
         <div class="letter-head">
           <h1 id="p-company-name">COMPANY NAME</h1>
           <p id="p-company-address">Company Address</p>
+          <p id="p-company-contact" class="company-contact">Website | Email | Phone</p>
         </div>
 
         <div class="letter-meta">
-          <div id="p-date">Date: </div>
-          <div id="p-ref">Ref: </div>
-        </div>
-
-        <div class="letter-title">
-          <h2>TO WHOMSOEVER IT MAY CONCERN</h2>
+          <div id="p-ref" class="ref-no"></div>
+          <div id="p-date" class="date"></div>
         </div>
 
         <div class="letter-content">
-          <p class="subject"><strong>Subject: Experience Certificate</strong></p>
+          <p class="subject"><strong>SUBJECT: EXPERIENCE CERTIFICATE</strong></p>
           
-          <p>This is to certify that <strong id="p-emp-name">[Employee Name]</strong> 
-            (Employee ID: <span id="p-emp-id">[ID]</span>) was employed with us as a 
-            <strong id="p-emp-designation">[Designation]</strong> from 
-            <strong id="p-join-date">[Joining Date]</strong> to 
-            <strong id="p-end-date">[Relieving Date]</strong>.
+          <p class="salutation">TO WHOMSOEVER IT MAY CONCERN</p>
+          
+          <p class="justified">
+            This is to certify that <strong><span id="p-emp-name">[Employee Name]</span></strong> 
+            <span id="emp-id-wrapper">(Employee ID: <span id="p-emp-id">[ID]</span>)</span> 
+            was employed with us as a <strong><span id="p-emp-designation">[Designation]</span></strong> 
+            from <strong><span id="p-join-date">[Joining Date]</span></strong> to 
+            <strong><span id="p-end-date">[Relieving Date]</span></strong>.
           </p>
 
-          <p id="p-body-text">[Custom Letter Body will appear here]</p>
+          <p id="p-body-text" class="justified custom-body"></p>
 
-          <p>We wish him/her all the best for their future endeavors.</p>
+          <p class="justified">
+            During their tenure with us, we found them to be hardworking, sincere, and dedicated towards their responsibilities. Their conduct and performance throughout the employment period were satisfactory.
+          </p>
+
+          <p class="justified">
+            We wish them all the best for their future endeavors and professional growth.
+          </p>
         </div>
 
         <!-- Signature Area -->
         <div class="signature-area">
-          <p>Sincerely,</p>
-          <br><br><br>
+          <p>For <strong><span id="p-signatory-company">[Company Name]</span></strong></p>
+          <br><br><br><br>
+          <div class="sign-line"></div>
           <p><strong id="p-signatory-name">[Signatory Name]</strong></p>
           <p id="p-signatory-title">[Signatory Title]</p>
-          <p id="p-signatory-company">[Company Name]</p>
+        </div>
+
+        <div class="footer-note">
+          This is a system-generated document.
         </div>
 
       </div>
